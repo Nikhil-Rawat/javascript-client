@@ -1,0 +1,58 @@
+/*reset Rules*/
+* {
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+a {
+    color: #3d3d3d;
+    padding: 10px;
+    display: block;
+}
+
+.status > a::after {
+    content: ' /';
+    padding: 0px 0px 0px 10px;
+}
+
+.status >a:last-child::after {
+    content: '';
+}
+
+.container {
+    margin: 0 auto;
+    width: 80%;
+    border: 1px solid #cecece;
+    margin-top: 100px;
+    box-shadow: 3px 3px 3px #cecece;
+    position: relative;
+}
+
+.checkoutnavigation {
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid #cecece;
+}
+
+.status {
+    display: flex;
+    margin-left: 5%;
+}
+.block {
+    display: flex;
+}
+.block > div {
+    width: 50%;
+}
+
+.cart {
+    background: #dbdbdb;
+}
+.cancel {
+    position: absolute;
+    right: 5px;
+    top: 2px;
+}
