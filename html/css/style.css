@@ -56,3 +56,7 @@ a {
     right: 5px;
     top: 2px;
 }
+.cancel:hover {
+    background-color: lightblue;
+    color: white ;
+}
