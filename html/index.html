@@ -1,32 +1,143 @@
 <!DOCTYPE html>
 <html>
-
     <head>
+        <link rel="stylesheet" href="./css/style.css">
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <meta charset="UTF-8"/>
-        <meta name="veiwport" content="width=devive-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="css/style.css">
-        <title>Index</title>
     </head>
     <body>
-        <section class= "container">     
-            <div class="checkoutnavigation">
-                <div>
-                   <a><b>Checkout</b></a>
+        <div class="container">
+            <div class="container_checkoutNavigation">
+                <b class="container_checkoutNavigation_checkout">Checkout</b>
+                <div class="container_checkoutNavigation_navigation">
+                    <a class="container_checkoutNavigation_navigation-steps">Shipping</a>
+                    <a class="container_checkoutNavigation_navigation-steps"><b>Payment Method</b></a>
+                    <a class="container_checkoutNavigation_navigation-steps">Confirmation</a>
                 </div>
-                <div class= "status">
-                   <a>Shopping </a>
-                   <a><b>Payment Method </b></a>
-                   <a>Confirmation </a>
+                <div class="container_checkoutNavigation-iconClose">
+                    <i class="fas fa-times-circle"></i>
                 </div>
-            <div class="cancel">
-                <i class="fa fa-ban" aria-hidden="true"></i>
             </div>
+            <div class="container_display">
+                <div class="container_display_Payment">
+                    <p>Wallet</p>
+                    <div class="container_display_Payment_card">
+                        <div class="container_display_Payment_card-image">
+                            <img src= "./css/image/discover.png" alt="discover">
+                            <a>Ending with 8899</a>
+                        </div>
+                        <div class="container_display_Payment_card-image">
+                            <img src= "./css/image/mastercard.png" alt="mastercard">
+                            <a>Ending with 8899</a>
+                        </div>
+                        <div class="container_display_Payment_card-image">
+                            <img src= "./css/image/visa.png" alt="visa">
+                            <a>Ending with 8899</a>
+                        </div>
+                    </div>
+                    <p>New Card</p>
+                    <div class="container_display_Payment__inputblock">
+                        <div class="container_display_Payment__inputblock_input">
+                            <input class="container_display_Payment__inputblock_input-info" type="text" placeholder="Name">
+                            <input class="container_display_Payment__inputblock_input-info" type="text" placeholder="XXXX-XXXX-XXXX-XXXX">
+                            <div class="container_display_Payment__inputblock_input-info_flex">
+                                <input class="container_display_Payment__inputblock_input-info_flex-date" type="text" placeholder="MM/YY">
+                                <input class="container_display_Payment__inputblock_input-info_flex-cvv" type="text" placeholder="CVV">
+                            </div>
+                            <button class="container_display_Payment__inputblock_input-continue">Continue</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container_display_cart">
+                    <div>
+                        <div class="container_display_cart_product">
+                            <div class="container_display_cart_product-info">
+                                <img src="./css/image/mobile-holder.jpg" alt="mobile-holder">
+                                <div class="container_display_cart_product-info-details">
+                                    <h5>Mobile Holder</h5>
+                                    <a><i>Black</i></a></br>
+                                    <a><b>Quantity: 1</b></a></br>
+                                </div>
+                            </div>
+                            <div class="container_display_cart_product-price">
+                                <a>$ 10.00</a>
+                            </div>
+                        </div>
+                        <div class="container_display_cart_product">
+                            <div class="container_display_cart_product-info">
+                                <img src="./css/image/rado.jpg" alt="rado">
+                                <div class="container_display_cart_product-info-details">
+                                    <h5>Radio Watch</h5>
+                                    <a><i>Black</i></a></br>
+                                    <a><b>Quantity: 1</b></a></br>
+                                </div>
+                            </div>
+                            <div class="container_display_cart_product-price">
+                                <a>$ 10.00</a>
+                            </div>
+                        </div>
+                        <div class="container_display_cart_product">
+                            <div class="container_display_cart_product-info">
+                                <img src="./css/image/usb-c-2-micro.jpeg" alt="usb-c-2-micro">
+                                <div class="container_display_cart_product-info-details">
+                                    <h5>C type to Micro Convertor</h5>
+                                    <a><i>Black</i></a></br>
+                                    <a><b>Quantity: 1</b></a></br>
+                                </div>
+                            </div>
+                            <div class="container_display_cart_product-price">
+                                <a>$ 10.00</a>
+                            </div>
+                        </div>
+                        <div class="container_display_cart_product">
+                            <div class="container_display_cart_product-info">
+                                <img src="./css/image/hard-case.jpg" alt="hard-case">
+                                <div class="container_display_cart_product-info-details">
+                                    <h5>Mobile Case</h5>
+                                    <a><i>Black</i></a></br>
+                                    <a><b>Quantity: 1</b></a></br>
+                                </div>
+                            </div>
+                            <div class="container_display_cart_product-price">
+                                <a>$ 10.00</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container_display_cart_lowercart">
+                        <div class="container_display_cart_lowercart_billingdetails">
+                            <div class="container_display_cart_lowercart_billingdetails-category">
+                                <a>Sub Total</a>
+                            </div>
+                            <div class="container_display_cart_lowercart_billingdetails-amount">
+                                <a>$ 100.00</a>
+                            </div>
+                        </div>
+                        <div class="container_display_cart_lowercart_billingdetails">
+                            <div class="container_display_cart_lowercart_billingdetails-category">
+                                <a>Shopping</a>
+                            </div>
+                            <div class="container_display_cart_lowercart_billingdetails-amount">
+                                <a>$ 10.00</a>
+                            </div>
+                        </div>
+                        <div class="container_display_cart_lowercart_billingdetails">
+                            <div class="container_display_cart_lowercart_billingdetails-category">
+                                <a>Taxes</a>
+                            </div>
+                            <div class="container_display_cart_lowercart_billingdetails-amount">
+                                <a>$ 5.00</a>
+                            </div>
+                        </div>
+                        <div class="total">
+                            <div class="container_display_cart_lowercart_billingdetails-category">
+                                <a><b>Total</b></a>
+                            </div>
+                            <div class="container_display_cart_lowercart_billingdetails-amount">
+                                <a><b>$ 115.00</b></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="block">
-                <div class= "Payment">Payment Block</div>
-                <div class= "cart">Cart Block</div>
-            </div>
-        </section>
+        </div>
     </body>
 </html>
