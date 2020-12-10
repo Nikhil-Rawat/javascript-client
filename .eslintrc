@@ -12,7 +12,8 @@
     "indent": [2, 2],
     "react/jsx-indent": ["error", 2],
     "import/prefer-default-export": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "react/forbid-prop-types": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,
