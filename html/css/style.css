@@ -9,193 +9,202 @@
 
 .container {
     border: outset;
-    margin: 5% 10%;
+    margin: 100px;
     box-shadow: 5px 6px #888888 ;
 }
 
-.upperdiv {
+.container_checkoutNavigation {
     display: flex;
     border-bottom: groove;
     justify-content: space-between;
 }
 
-.checkout {
+.container_checkoutNavigation_checkout {
     width: 10%;
     padding: 10px;
 }
 
-.options {
+.container_checkoutNavigation_navigation {
     width: 60%;
     padding: 10px;
     display: flex;
 }
 
-.option {
+.container_checkoutNavigation_navigation-steps {
     padding-right: 10px;
 }
 
-
-.option::after {
+.container_checkoutNavigation_navigation-steps::after {
     content: " / ";
 }
-.option:last-child::after {
+.container_checkoutNavigation_navigation-steps:last-child::after {
     content: "";
 }
 
-.lowerdiv {
+.container_checkoutNavigation-iconClose {
+    position: relative;
+    padding: 5px;
+}
+.container_checkoutNavigation-iconClose:hover {
+    background-color: lightgray;
+    border: outset;
+}
+
+.container_display {
     display: flex;
 }
 
-.cardsection {
+.container_display_Payment {
     padding: 10px;
     width: 60%;
+    margin-top: 10px;
 }
 
-.wallet {
-    border-bottom: groove;
-    font-size: 5mm;
+.container_display_Payment p {
+    font-size: 6mm;
     color: lightgrey;
+    border-bottom: groove;
 }
 
-.card {
+.container_display_Payment_card {
     display: flex;
     justify-content: space-between;
-    margin: 10px 10px;
+    margin: 0px 10px;
+    padding-top: 10px;
 }
 
-.image img{
+.container_display_Payment_card-image img{
     width: 90%;
+    padding: 5px 5px;
+    border-radius: 8px;
 }
-.image img:hover {
+
+.container_display_Payment_card-image img:hover {
     background-color: wheat;
     padding: 5px 5px;
     border-radius: 8px;
 }
 
-.newcard {
-    border-bottom: groove;
-    font-size: 5mm;
-    color: lightgrey;
-}
-
-.inputblock {
-    text-align: center;
+.container_display_Payment_inputblock {
     margin-top: 10px;
-    
 }
 
-.inputinfo input {
-    height: 10mm;
-    width: 10cm;
-    padding-left: 10px;
-    border: groove;
-    border-bottom: 0;
-    border-radius: 2px;
-}
-
-.inputinfo_flex {
-    display: flex;
-    padding: 0mm 4.4cm;
-}
-
-.inputinfo_date input{
-    width: 4.84cm;
-    height: 10mm;
-    padding-left: 10px;
-    border: groove;
-    border-radius: 2px;
-}
-.inputinfo_cvv input {
-    width: 4.84cm;
-    height: 10mm;
-    padding-left: 10px;
-    border: groove;
-    border-left: 0;
-    border-radius: 2px;
-}
-
-.closebutton {
-    position: relative;
-    padding: 5px;
-}
-.closebutton:hover {
-    background-color: lightgray;
-    border: outset;
-}
-.continuebutton {
+.container_display_Payment__inputblock_input {
     text-align: center;
-    background-color:  lightgreen;
-    border-radius: 4px;
-    border: 2px solid lightgreen;
-    width: 10.2cm;
-    height: 10mm;
-    margin: 20px 4.4cm;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 
-.continuebutton:hover {
+.container_display_Payment__inputblock_input-info {
+    width: 100%;
+    padding: 10px;
+    border: groove;
+    border-radius: 2px;
+    box-sizing: border-box;
+    margin: 2px 0px;
+}
+
+.container_display_Payment__inputblock_input-info_flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container_display_Payment__inputblock_input-info_flex-date {
+    width: 48%;
+    padding: 10px;
+    border: groove;
+    border-radius: 2px;
+}
+
+.container_display_Payment__inputblock_input-info_flex-cvv {
+    width: 48%;
+    padding: 10px;
+    border: groove;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+.container_display_Payment__inputblock_input-continue:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
     background-color: green;
 }
 
-.continue {
+.container_display_Payment__inputblock_input-continue {
     font-size: 20px;
-    padding: 10px;
     color: white;
+    text-align: center;
+    background-color:  lightgreen;
+    border-radius: 4px;
+    border: 2px solid lightgreen;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0px;
 }
 
-.cart {
+.container_display_cart {
     width: 40%;
     background-color: lightgrey;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.container_display_cart_product:last-child {
+    border-bottom: none;
 }
 
-.products {
+.container_display_cart_product {
     display: flex;
     justify-content: space-between;
     padding: 5px 5px;
     border-bottom: groove;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.info img {
-    width: 11mm;
-    height: 11mm;
+.container_display_cart_product-info img {
+    width: 38px;
+    height: 38px;
     border: 5px solid gray;
 }
 
-.info {
+.container_display_cart_product-info {
     display: flex;
 }
 
-.details a {
+.container_display_cart_product-info-details a {
     font-size: 10px;
     padding-left: 10px;
 }
 
-.details h5 {
+.container_display_cart_product-info-details h5 {
     font-size: 12px;
     padding-left: 10px;
 }
 
-.price a {
+.container_display_cart_product-price a {
     font-size: 12px;
 }
 
-.lowercart {
-    margin-top: 4cm;
+.container_display_cart_lowercart {
+    border-top:groove;
 }
-.billingdetails {
+.container_display_cart_lowercart_billingdetails {
     display: flex;
     justify-content: space-between;
     padding: 5px 0px 5px 5px;
 }
 
-.category {
-    flex: 5;
+.container_display_cart_lowercart_billingdetails-category {
+    width: 50%;
     font-size: 12px;
 }
-.amount {
-    flex: 1;
+.container_display_cart_lowercart_billingdetails-amount {
+    width: 50%;
     font-size: 12px;
-    padding-left: 5cm;
+    text-align: right;
+    padding-right: 5px;
 }
 
 .total {
@@ -203,4 +212,44 @@
     display: flex;
     justify-content: space-between;
     padding: 5px 0px 5px 5px;
+}
+
+@media (max-width: 992px) {
+    .container{
+        margin: 20px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .container_display_Payment{
+        width: 50%;
+    }
+    .container_display_cart{
+        width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .container_display{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .container_display_cart{
+        width: 100%;
+    }
+    .container_display_Payment{
+        width: 100%;
+    }
+}
+
+@media (max-width:768px) {
+    .container_checkoutNavigation_navigation{
+        display: none;
+    }
+}
+
+@media (max-width:400px) {
+    .container_display_Payment_card-image{
+        width: 100%;
+    }
 }
