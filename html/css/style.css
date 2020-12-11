@@ -171,23 +171,6 @@
 
 .container_display_cart_product-info {
     display: flex;
-    padding: 0mm 4.4cm;
-}
-
-.inputinfo_date input{
-    width: 4.84cm;
-    height: 10mm;
-    padding-left: 10px;
-    border: groove;
-    border-radius: 2px;
-}
-.inputinfo_cvv input {
-    width: 4.84cm;
-    height: 10mm;
-    padding-left: 10px;
-    border: groove;
-    border-left: 0;
-    border-radius: 2px;
 }
 
 .container_display_cart_product-info-details a {
@@ -247,11 +230,11 @@
 }
 
 @media (max-width: 600px) {
-    .container_display {
+    .container_display{
         display: flex;
         flex-direction: column-reverse;
     }
-    .container_display_cart {
+    .container_display_cart{
         width: 100%;
     }
     .container_display_Payment{
