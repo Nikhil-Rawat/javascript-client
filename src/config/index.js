@@ -6,6 +6,7 @@ import {
   FULL_STACK_IMAGE,
   JS_IMAGE,
   LOAD_BALANCER_IMAGE,
+  select,
 } from './constants';
 
 export {
@@ -16,4 +17,5 @@ export {
   FULL_STACK_IMAGE,
   JS_IMAGE,
   LOAD_BALANCER_IMAGE,
+  select,
 };
