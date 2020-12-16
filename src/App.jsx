@@ -1,10 +1,15 @@
 import React from 'react';
 // import { TextFieldDemo } from './pages';
-import { InputDemo } from './pages';
+import { theme } from './theme';
+// import { InputDemo } from './pages';
+import { ChildrenDemo } from './pages';
 
 function App() {
+  const classes = theme();
   return (
-    <InputDemo />
+    <div className={classes.root}>
+      <ChildrenDemo />
+    </div>
   );
 }
 
