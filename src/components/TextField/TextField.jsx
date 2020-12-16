@@ -16,10 +16,13 @@ import stylesheet from './style';
 // };
 
 const TextField = (prop) => {
-  const { defaultValue, error, onChange } = prop;
+  const {
+    defaultValue, error, onChange, onBlur,
+  } = prop;
   return (
     <>
-      <input type="text" defaultValue={defaultValue} error={error} onChange={onChange} style={stylesheet.input} />
+      <input type="text" defaultValue={defaultValue} onChange={onChange} style={stylesheet.input} onBlur={onBlur} />
+      <p>{error}</p>
     </>
   );
 };

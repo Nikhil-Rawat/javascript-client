@@ -5,11 +5,11 @@ import stylesheet from './style';
 
 const SelectField = (prop) => {
   const {
-    value, error, onChange, options, defaultText,
+    value, error, onChange, options, defaultText, onBlur,
   } = prop;
   return (
     <>
-      <select value={value} name="sports" id="Sports" error={error} onChange={onChange} style={stylesheet.selectField}>
+      <select value={value} name="sports" id="Sports" error={error} onChange={onChange} style={stylesheet.selectField} onBlur={onBlur}>
         <option value="">
           {defaultText}
         </option>
@@ -20,6 +20,7 @@ const SelectField = (prop) => {
           {options[1].value}
         </option>
       </select>
+      <p>{error}</p>
     </>
   );
 };
