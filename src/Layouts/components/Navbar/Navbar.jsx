@@ -29,10 +29,10 @@ export default function NavBar() {
             Training Portal
           </Typography>
           <div className={classes.components}>
-            <Button color="inherit">TRAINEE</Button>
-            <Button color="inherit">TEXTFIELD DEMO</Button>
-            <Button color="inherit">INPUT Demo</Button>
-            <Button color="inherit">CHILDREN DEMO</Button>
+            <Button color="inherit" href="/">TRAINEE</Button>
+            <Button color="inherit" href="/TextField-Demo">TEXTFIELD DEMO</Button>
+            <Button color="inherit" href="/Input-Demo">INPUT Demo</Button>
+            <Button color="inherit" href="/Children-Demo">CHILDREN DEMO</Button>
           </div>
           <Button color="inherit">LOGOUT</Button>
         </Toolbar>

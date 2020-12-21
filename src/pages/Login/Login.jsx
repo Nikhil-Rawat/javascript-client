@@ -2,9 +2,6 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import { Typography, InputAdornment, Container } from '@material-ui/core';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import MailIcon from '@material-ui/icons/Mail';
@@ -13,13 +10,22 @@ import * as yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    border: '1px solid silver',
+    boxShadow: '1px 2px 3px silver',
+    marginTop: '100px',
+    width: '400px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
   icon: {
     backgroundColor: 'red',
     color: 'white',
     borderRadius: '50%',
-    padding: '5px',
     alignSelf: 'center',
-    margin: '10px',
+    padding: '5px',
+    marginTop: '20px',
+    marginBottom: '10px',
   },
   components: {
     marginRight: theme.spacing(4),
@@ -31,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '25px',
   },
   input: {
-    width: '80%',
     alignSelf: 'center',
-    padding: '10px',
+    margin: '15px 0px',
   },
   signin: {
-    width: '80%',
-    alignSelf: 'center',
     margin: '20px',
+    alignSelf: 'center',
+    padding: '10px',
+    boxSizing: 'border-box',
   },
 }));
 
@@ -100,54 +106,52 @@ const FormDialog = () => {
   };
 
   return (
-    <Container>
-      <Dialog maxWidth="xs" fullWidth open={open.openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <LockRoundedIcon className={classes.icon} />
-        <Typography id="form-dialog-title" className={classes.login}>Login</Typography>
-        <DialogContent className={classes.input}>
-          <TextField
-            margin="dense"
-            id="Email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            error={getError('Email')}
-            helperText={getError('Email')}
-            onChange={handleEmailChange}
-            onBlur={() => handleBlur('Email')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <MailIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            id="Password"
-            label="Password"
-            type="password"
-            variant="outlined"
-            error={getError('Password')}
-            helperText={getError('Password')}
-            onChange={handlePasswordChange}
-            onBlur={() => handleBlur('Password')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VisibilityOffIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-          />
-        </DialogContent>
-        <Button fullWidth onClick={handleClose} className={classes.signin} color="primary" variant="contained" disabled={hasError() || !isTouched()}>
-          SIGN IN
-        </Button>
-      </Dialog>
+    <Container className={classes.container} fullWidth aria-labelledby="form-dialog-title">
+      <LockRoundedIcon className={classes.icon} />
+      <Typography id="form-dialog-title" className={classes.login}>Login</Typography>
+      <TextField
+        className={classes.input}
+        size="medium"
+        id="Email"
+        label="Email"
+        type="email"
+        variant="outlined"
+        error={getError('Email')}
+        helperText={getError('Email')}
+        onChange={handleEmailChange}
+        onBlur={() => handleBlur('Email')}
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <MailIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <TextField
+        className={classes.input}
+        size="medium"
+        id="Password"
+        label="Password"
+        type="password"
+        variant="outlined"
+        error={getError('Password')}
+        helperText={getError('Password')}
+        onChange={handlePasswordChange}
+        onBlur={() => handleBlur('Password')}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <VisibilityOffIcon />
+            </InputAdornment>
+          ),
+        }}
+        fullWidth
+      />
+      <Button fullWidth onClick={handleClose} className={classes.signin} color="primary" variant="contained" disabled={hasError() || !isTouched()}>
+        SIGN IN
+      </Button>
     </Container>
   );
 };
