@@ -17,11 +17,11 @@ import stylesheet from './style';
 
 const TextField = (prop) => {
   const {
-    defaultValue, error, onChange, onBlur,
+    defaultValue, error, onChange, onBlur, disabled,
   } = prop;
   return (
     <>
-      <input type="text" defaultValue={defaultValue} onChange={onChange} style={stylesheet.input} onBlur={onBlur} />
+      <input type="text" defaultValue={defaultValue} disabled={disabled} onChange={onChange} style={stylesheet.input} onBlur={onBlur} />
       <p>{error}</p>
     </>
   );
@@ -35,6 +35,7 @@ TextField.prototype = {
 
 TextField.defaultProps = {
   error: '',
+  disabled: false,
 };
 
 export default TextField;
