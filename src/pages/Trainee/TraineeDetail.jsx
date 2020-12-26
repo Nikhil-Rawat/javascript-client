@@ -3,6 +3,7 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import trainees from './data/trainee';
 import { NotFound } from '../NoMatch';
 
@@ -24,7 +25,13 @@ const traineeDetails = (props) => {
           <Typography>{details.email}</Typography>
         </CardContent>
       </Card>
-      <Button value="BACK" />
+      <Typography align="center">
+        <Link to="/">
+          <Button variant="outlined" color="primary">
+            Back
+          </Button>
+        </Link>
+      </Typography>
     </>
   );
 };

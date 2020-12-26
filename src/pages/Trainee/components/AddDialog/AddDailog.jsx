@@ -160,7 +160,7 @@ const FormDialog = (props) => {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { onSubmit(state); }} color="primary" disabled={hasError() && isTouched()}>
+          <Button onClick={() => { onSubmit(state); }} color="primary" disabled={hasError() || !isTouched()}>
             Submit
           </Button>
         </DialogActions>
