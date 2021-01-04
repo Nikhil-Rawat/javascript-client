@@ -9,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { TableSortLabel } from '@material-ui/core';
+import { TableSortLabel, TablePagination, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 
 export default function BasicTable(props) {
   const {
-    id, data, columns, order, orderBy, onSort, onSelect,
+    id, data, columns, order, orderBy, onSort, onSelect, page, count, onChangePage, actions,
   } = props;
   const classes = useStyles();
 
@@ -83,10 +83,25 @@ export default function BasicTable(props) {
                   </TableCell>
                 ))
               }
+              {
+                actions.map((action) => (
+                  <IconButton onClick={action.handler}>
+                    {action.icon}
+                  </IconButton>
+                ))
+              }
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        count={count}
+        page={page}
+        rowsPerPageOptions={[]}
+        component="div"
+        onChangePage={onChangePage}
+        rowsPerPage={5}
+      />
     </TableContainer>
   );
 }
@@ -99,6 +114,10 @@ BasicTable.propTypes = {
   orderBy: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  actions: PropTypes.array.isRequired,
 };
 
 BasicTable.defaultProps = {
