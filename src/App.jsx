@@ -1,21 +1,23 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { theme } from './theme';
 import { AuthRoute, PrivateRoute } from './routes';
+import { SnackBarProvider } from './contexts';
+import { theme } from './theme';
 
 function App() {
-  const classes = theme();
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <Router>
-        <Switch>
-          <Route exact path="/login" component={AuthRoute} />
-          <Route default component={PrivateRoute} />
-        </Switch>
-      </Router>
-    </div>
+    <ThemeProvider theme={theme}>
+      <SnackBarProvider>
+        <CssBaseline />
+        <Router>
+          <Switch>
+            <Route exact path="/login" component={AuthRoute} />
+            <Route default component={PrivateRoute} />
+          </Switch>
+        </Router>
+      </SnackBarProvider>
+    </ThemeProvider>
   );
 }
 

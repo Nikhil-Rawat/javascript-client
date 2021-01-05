@@ -1,44 +1,47 @@
 /* eslint-disable no-eval */
-import { func, number } from 'prop-types';
 import React from 'react';
-import { string } from 'yup/lib/locale';
+import { string, number, func } from 'prop-types';
+
+const getResult = (first, second, operator) => {
+  let result;
+  const operatorList = ['+', '-', '/', '*'];
+  if (operator === '/' && second === 0) {
+    result = 'Infinity';
+  }
+
+  if (!operatorList.includes(operator)) {
+    result = 'Invalid Operator';
+  }
+
+  if (operatorList.includes(operator)) {
+    result = eval(`${first} ${operator} ${second}`);
+  }
+  return result;
+};
 
 const Math = (props) => {
-  const getResult = (first, second, operator) => {
-    const operators = ['+', '-', '/', '*'];
-    let result;
-    if (!operators.includes(operator)) {
-      result = 'Invalid Operators';
-    } else if (operator === '/' && second === 0) {
-      result = 'Infinity';
-    } else result = eval(`${first} ${operator} ${second}`);
-    return result;
-  };
   const {
     first, second, operator, children,
   } = props;
+
   if (children) {
-    return children({ first, second, result: getResult(first, second, operator) });
+    return children(
+      first, second, getResult(first, second, operator),
+    );
   }
   return (
     <p>
-      Result of
-      {' '}
       {first}
       {' '}
-      and
+      {operator}
       {' '}
       {second}
       {' '}
-      is
+      =
       {' '}
       {getResult(first, second, operator)}
     </p>
   );
-};
-
-Math.defaultProps = {
-  children: null,
 };
 
 Math.propTypes = {
@@ -46,6 +49,10 @@ Math.propTypes = {
   second: number.isRequired,
   operator: string.isRequired,
   children: func,
+};
+
+Math.defaultProps = {
+  children: null,
 };
 
 export default Math;

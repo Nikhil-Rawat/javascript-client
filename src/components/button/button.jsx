@@ -3,10 +3,10 @@ import { bool, func, string } from 'prop-types';
 import React from 'react';
 import { Input } from './style';
 
-const ButtonField = (prop) => {
+const ButtonField = (props) => {
   const {
     disabled, onClick, value, color,
-  } = prop;
+  } = props;
   return (
     <>
       <Input type="button" value={value} onClick={onClick} disabled={disabled} color={color} />
@@ -14,10 +14,11 @@ const ButtonField = (prop) => {
   );
 };
 
-ButtonField.prototype = {
+ButtonField.propTypes = {
   value: string.isRequired,
   onClick: func.isRequired,
   disabled: bool,
+  color: string.isRequired,
 };
 
 ButtonField.defaultProps = {

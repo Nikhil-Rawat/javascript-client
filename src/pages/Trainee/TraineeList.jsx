@@ -6,9 +6,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
 import trainees from './data/trainee';
-import {
-  FormDialog, EditDialog, DeleteDialog, BasicTable,
-} from './components';
+import { FormDialog, EditDialog, DeleteDialog } from './components';
+import { BasicTable } from '../../components';
+import { SnackbarContext } from '../../contexts';
 
 const TraineeList = (props) => {
   const { match, history } = props;
@@ -41,7 +41,8 @@ const TraineeList = (props) => {
     setPage(newPage);
   };
 
-  const handleSubmit = (state) => {
+  const handleSubmit = (openSnackbar, state) => {
+    openSnackbar('success', 'Trainee Created Successfully');
     setOpen(false);
     console.log(state);
   };
@@ -62,7 +63,8 @@ const TraineeList = (props) => {
     setEditOpen(false);
   };
 
-  const handleEditDialogSubmit = (state) => {
+  const handleEditDialogSubmit = (openSnackbar, state) => {
+    openSnackbar('success', 'Trainee Updated Successfully');
     setEditOpen(false);
     console.log(state);
   };
@@ -71,75 +73,85 @@ const TraineeList = (props) => {
     setDeleteOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (openSnackbar) => {
+    if (details.createdAt >= '2019-02-14') {
+      openSnackbar('success', 'Trainee Deleted Successfully');
+    } else {
+      openSnackbar('error', 'Trainee cannot be Deleted');
+    }
     setDeleteOpen(false);
     console.log(details);
   };
 
   return (
-    <>
-      <CssBaseline />
-      <Button size="large" variant="outlined" color="primary" onClick={handleClickOpen}>
-        Add Trainee
-      </Button>
-      <BasicTable
-        id="id"
-        data={trainees}
-        columns={[
-          {
-            field: 'name',
-            label: 'Name',
-          },
-          {
-            field: 'email',
-            label: 'Email Address',
-            format: (value) => value && value.toUpperCase(),
-          },
-          {
-            field: 'createdAt',
-            label: 'Date',
-            align: 'right',
-            format: getDateFormatted,
-          },
-        ]}
-        actions={[
-          {
-            icon: <EditIcon />,
-            handler: handleEditDialogOpen,
-          },
-          {
-            icon: <DeleteIcon />,
-            handler: handleDeleteDialogOpen,
-          },
-        ]}
-        order={order}
-        orderBy={orderBy}
-        onSort={handleSort}
-        onSelect={handleSelect}
-        page={page}
-        onChangePage={handleChangePage}
-        count={100}
-        rowsPerPage={5}
-      />
-      <FormDialog
-        open={open}
-        onClose={handleClose}
-        onSubmit={handleSubmit}
-      />
-      <EditDialog
-        open={editOpen}
-        onClose={handleEditDialogClose}
-        onSubmit={handleEditDialogSubmit}
-        defaultValues={details}
-      />
-      <DeleteDialog
-        open={deleteOpen}
-        onClose={handleDeleteClose}
-        onDelete={handleDelete}
-      />
-    </>
+    <SnackbarContext.Consumer>
+      {({ openSnackbar }) => (
+        <>
+          <CssBaseline />
+          <Button size="large" variant="outlined" color="primary" onClick={handleClickOpen}>
+            Add Trainee
+          </Button>
+          <BasicTable
+            id="id"
+            data={trainees}
+            columns={[
+              {
+                field: 'name',
+                label: 'Name',
+              },
+              {
+                field: 'email',
+                label: 'Email Address',
+                format: (value) => value && value.toUpperCase(),
+              },
+              {
+                field: 'createdAt',
+                label: 'Date',
+                align: 'right',
+                format: getDateFormatted,
+              },
+            ]}
+            actions={[
+              {
+                icon: <EditIcon />,
+                handler: handleEditDialogOpen,
+              },
+              {
+                icon: <DeleteIcon />,
+                handler: handleDeleteDialogOpen,
+              },
+            ]}
+            order={order}
+            orderBy={orderBy}
+            onSort={handleSort}
+            onSelect={handleSelect}
+            page={page}
+            onChangePage={handleChangePage}
+            count={100}
+            rowsPerPage={5}
+          />
+          <FormDialog
+            open={open}
+            onClose={handleClose}
+            onSubmit={(state) => handleSubmit(openSnackbar, state)}
+          />
+          <EditDialog
+            open={editOpen}
+            onClose={handleEditDialogClose}
+            onSubmit={(state) => handleEditDialogSubmit(openSnackbar, state)}
+            defaultValues={details}
+          />
+          <DeleteDialog
+            open={deleteOpen}
+            onClose={handleDeleteClose}
+            onDelete={() => handleDelete(openSnackbar)}
+          />
+        </>
+      )}
+    </SnackbarContext.Consumer>
   );
 };
+
 TraineeList.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

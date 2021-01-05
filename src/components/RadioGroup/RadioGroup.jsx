@@ -1,5 +1,6 @@
 import React from 'react';
 import { func, string } from 'prop-types';
+import { stylesheet } from './style';
 
 const RadioGroup = (prop) => {
   const {
@@ -31,7 +32,7 @@ const RadioGroup = (prop) => {
           {options[3].value}
         </label>
       </div>
-      <p>{error}</p>
+      <p style={stylesheet.error}>{error}</p>
     </>
   );
 };

@@ -1,9 +1,10 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core';
 
-export const theme = makeStyles({
+export const theme = createMuiTheme({
   root: {
     fontFamily: 'Comic Sans MS, cursive, sans-serif',
-    fontWeight: 'cursive',
     fontSize: 10,
+    fontWeight: 'cursive',
+    spacing: (factor) => `${0.25 * factor}rem`,
   },
 });

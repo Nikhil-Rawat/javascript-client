@@ -1,4 +1,4 @@
 export { FormDialog } from './AddDialog';
 export { DeleteDialog } from './DeleteDialog';
 export { EditDialog } from './EditDialog';
-export { BasicTable } from './Table';
+export { BasicTable } from '../../../components/Table';

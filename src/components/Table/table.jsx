@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
     border: '1px solid silver',
     boxShadow: '1px 2px 3px silver',
+    marginTop: '10px',
   },
   topLabel: {
     color: 'gray',
@@ -38,6 +39,26 @@ const useStyles = makeStyles({
     },
   },
 });
+
+const ActionsCell = (ActionProps) => {
+  const { actions, details } = ActionProps;
+  return (
+    <>
+      {
+        actions.map((action, index) => (
+          <IconButton
+            key={`${index + 1}`}
+            disableFocusRipple
+            size="small"
+            onClick={() => action.handler(details)}
+          >
+            {action.icon}
+          </IconButton>
+        ))
+      }
+    </>
+  );
+};
 
 export default function BasicTable(props) {
   const {
@@ -83,13 +104,9 @@ export default function BasicTable(props) {
                   </TableCell>
                 ))
               }
-              {
-                actions.map((action) => (
-                  <IconButton onClick={action.handler}>
-                    {action.icon}
-                  </IconButton>
-                ))
-              }
+              <TableCell align="center" key={`${data[id]}`}>
+                <ActionsCell actions={actions} details={data} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
