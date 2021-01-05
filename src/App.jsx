@@ -12,7 +12,7 @@ function App() {
         <CssBaseline />
         <Router>
           <Switch>
-            <Route exact path="/login" component={AuthRoute} />
+            <Route path="/login" component={AuthRoute} />
             <Route default component={PrivateRoute} />
           </Switch>
         </Router>

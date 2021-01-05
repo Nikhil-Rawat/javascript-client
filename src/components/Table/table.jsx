@@ -42,6 +42,7 @@ const useStyles = makeStyles({
 
 const ActionsCell = (ActionProps) => {
   const { actions, details } = ActionProps;
+  console.log(details);
   return (
     <>
       {

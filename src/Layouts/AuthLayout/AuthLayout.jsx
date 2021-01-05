@@ -1,13 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Footer } from '../components';
 import { FormDialog } from '../../pages';
 
-const AuthLayout = () => (
+const AuthLayout = ({ history }) => (
   <>
-    <FormDialog />
+    <FormDialog history={history} />
     <br />
     <Footer />
   </>
 );
+
+AuthLayout.propTypes = {
+  history: PropTypes.object.isRequired,
+};
 
 export default AuthLayout;

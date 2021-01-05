@@ -88,7 +88,7 @@ const TraineeList = (props) => {
       {({ openSnackbar }) => (
         <>
           <CssBaseline />
-          <Button size="large" variant="outlined" color="primary" onClick={handleClickOpen}>
+          <Button size="large" variant="outlined" color="primary" onClick={handleClickOpen} style={{ marginLeft: '10px' }}>
             Add Trainee
           </Button>
           <BasicTable

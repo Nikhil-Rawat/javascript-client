@@ -1,13 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { AuthLayout } from '../Layouts';
 
 const AuthRoute = () => (
-  <Router>
-    <Switch>
-      <Route path="/" component={AuthLayout} />
-    </Switch>
-  </Router>
+  <Switch>
+    <Route
+      exact
+      path="/login"
+      render={({ match, history }) => (
+        <AuthLayout match={match} history={history} />
+      )}
+    />
+  </Switch>
 );
 
 export default AuthRoute;

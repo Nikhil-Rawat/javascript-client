@@ -2,12 +2,12 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 
 const NotFound = () => (
-  <div>
+  <div style={{ marginTop: '50px' }}>
     <br />
-    <Typography variant="h3" align="center">Not Found!</Typography>
+    <Typography variant="h3" align="center" color="error">Not Found</Typography>
     <br />
-    <Typography variant="body1" color="textSecondary" align="center">
-      Seems like the page you are looking for after does not exists
+    <Typography variant="body1" color="primary" align="center">
+      Seems like the page you are looking for does not exists
     </Typography>
   </div>
 );
