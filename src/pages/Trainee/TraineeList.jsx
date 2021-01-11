@@ -1,24 +1,30 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, CssBaseline } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
-import trainees from './data/trainee';
+// import trainees from './data/trainee';
 import { FormDialog, EditDialog, DeleteDialog } from './components';
 import { BasicTable } from '../../components';
 import { SnackbarContext } from '../../contexts';
+import { callApi } from '../../libs/utils';
+import { WithLoaderAndMessage } from '../../components/HOC';
 
 const TraineeList = (props) => {
   const { match, history } = props;
-  const [open, setOpen] = React.useState(false);
-  const [editOpen, setEditOpen] = React.useState(false);
-  const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [order, setOrder] = React.useState();
-  const [orderBy, setOrderBy] = React.useState();
-  const [page, setPage] = React.useState(0);
-  const [details, setDetails] = React.useState({});
+  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [order, setOrder] = useState();
+  const [orderBy, setOrderBy] = useState();
+  const [page, setPage] = useState(0);
+  const [details, setDetails] = useState({});
+  const [records, setRecords] = useState({ TraineeArray: [], TotalCount: 0 });
+  const [loading, setLoading] = useState(true);
+
+  const EnhanchedTable = WithLoaderAndMessage(BasicTable);
 
   const handleSort = (property) => {
     setOrder(order === 'asc' && orderBy === property ? 'desc' : 'asc');
@@ -41,10 +47,17 @@ const TraineeList = (props) => {
     setPage(newPage);
   };
 
-  const handleSubmit = (openSnackbar, state) => {
-    openSnackbar('success', 'Trainee Created Successfully');
-    setOpen(false);
-    console.log(state);
+  const handleSubmit = async (openSnackbar, state) => {
+    setLoading(true);
+    await callApi('trainee/create', state);
+    if (localStorage.getItem('status') === '200') {
+      openSnackbar('success', 'Trainee Created Successfully');
+      setOpen(false);
+      setLoading(false);
+    } else {
+      openSnackbar('error', 'Trainee Not Created');
+      setLoading(false);
+    }
   };
 
   const getDateFormatted = (date) => moment(date).format('dddd, MMMM Do yyyy, hh:mm:ss a');
@@ -80,8 +93,28 @@ const TraineeList = (props) => {
       openSnackbar('error', 'Trainee cannot be Deleted');
     }
     setDeleteOpen(false);
-    console.log(details);
   };
+
+  const handleTableData = async () => {
+    const response = await callApi('trainee/getall', { }, { skip: page * 5, limit: 5 });
+    let TraineeData = [];
+    let totalcount = 0;
+    if (response.data) {
+      TraineeData = response.data.data[0].records;
+      totalcount = response.data.data[0].Total_Count;
+      localStorage.setItem('detailsData', JSON.stringify(TraineeData));
+      setRecords({ TraineeArray: TraineeData, TotalCount: totalcount });
+      setLoading(false);
+    } else {
+      setLoading(false);
+      return [];
+    }
+    return null;
+  };
+
+  React.useEffect(() => {
+    handleTableData();
+  }, [open, page]);
 
   return (
     <SnackbarContext.Consumer>
@@ -91,9 +124,12 @@ const TraineeList = (props) => {
           <Button size="large" variant="outlined" color="primary" onClick={handleClickOpen} style={{ marginLeft: '10px' }}>
             Add Trainee
           </Button>
-          <BasicTable
-            id="id"
-            data={trainees}
+          <EnhanchedTable
+            id="_id"
+            data={records.TraineeArray}
+            loader={loading}
+            disabled={loading}
+            dataLength={records.TraineeArray.length}
             columns={[
               {
                 field: 'name',
@@ -127,10 +163,11 @@ const TraineeList = (props) => {
             onSelect={handleSelect}
             page={page}
             onChangePage={handleChangePage}
-            count={100}
+            count={records.TotalCount}
             rowsPerPage={5}
           />
           <FormDialog
+            loading={loading}
             open={open}
             onClose={handleClose}
             onSubmit={(state) => handleSubmit(openSnackbar, state)}

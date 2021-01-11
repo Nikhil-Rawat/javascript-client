@@ -1,51 +1,41 @@
+/* eslint-disable react/forbid-prop-types */
+import { array, func, string } from 'prop-types';
 import React from 'react';
-import { func, string } from 'prop-types';
-import { stylesheet } from './style';
 
-const RadioGroup = (prop) => {
+const RadioGroup = (props) => {
   const {
-    onChange, options, error, onBlur,
-  } = prop;
+    options, onChange, onBlur, error,
+  } = props;
   return (
     <>
-      <div>
-        <input type="radio" name="role" id="Role" value={options[0].value} onChange={onChange} onBlur={onBlur} />
-        <label htmlFor={options[0].label}>
-          {options[0].value}
-        </label>
-      </div>
-      <div>
-        <input type="radio" name="role" id="Role" value={options[1].value} onChange={onChange} onBlur={onBlur} />
-        <label htmlFor={options[1].label}>
-          {options[1].value}
-        </label>
-      </div>
-      <div>
-        <input type="radio" name="role" id="Role" value={options[2].value} onChange={onChange} onBlur={onBlur} />
-        <label htmlFor={options[2].label}>
-          {options[2].value}
-        </label>
-      </div>
-      <div>
-        <input type="radio" name="role" id="Role" value={options[3].value} onChange={onChange} onBlur={onBlur} />
-        <label htmlFor={options[0].label}>
-          {options[3].value}
-        </label>
-      </div>
-      <p style={stylesheet.error}>{error}</p>
+      <form style={{ marginTop: '20px' }}>
+        {
+          options.map((element) => (
+            <div key={element.value}>
+              <input type="radio" name="sports" id={element.label} onBlur={onBlur} value={element.value} onChange={onChange} style={{ marginBottom: '10px' }} />
+              <label htmlFor={element.label}>{element.label}</label>
+              <br />
+            </div>
+          ))
+        }
+      </form>
+      <p style={{ marginLeft: '10px', color: 'red' }}>{error}</p>
     </>
   );
 };
 
-RadioGroup.prototype = {
-  defaultvalue: string.isRequired,
+RadioGroup.propTypes = {
+  options: array,
+  onChange: func,
+  onBlur: func,
   error: string,
-  onChange: func.isRequired,
 };
 
 RadioGroup.defaultProps = {
-  error: '',
   options: [],
+  onChange: () => {},
+  onBlur: () => {},
+  error: '',
 };
 
 export default RadioGroup;

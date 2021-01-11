@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom';
+import { routes } from '../../../config/constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     fontFamily: 'Bold',
+  },
+  NavLink: {
+    color: 'white',
+    textDecoration: 'none',
+  },
+  button: {
+    fontWeight: '600',
+    color: 'inherit',
   },
 }));
 
@@ -31,21 +40,21 @@ export default function NavBar() {
             Training Portal
           </Typography>
           <div className={classes.components}>
-            <NavLink to="/" style={{ color: 'white', textDecoration: 'none' }}>
-              <Button color="inherit" style={{ fontWeight: '600' }}>TRAINEE</Button>
+            <NavLink to="/" className={classes.NavLink}>
+              <Button className={classes.button}>TRAINEE</Button>
             </NavLink>
-            <NavLink to="/TextField-Demo" style={{ color: 'white', textDecoration: 'none' }}>
-              <Button color="inherit" style={{ fontWeight: '600' }}>TEXTFIELD DEMO</Button>
+            <NavLink to={routes.textfieldDDemo} className={classes.NavLink}>
+              <Button className={classes.button}>TEXTFIELD DEMO</Button>
             </NavLink>
-            <NavLink to="/Input-Demo" style={{ color: 'white', textDecoration: 'none' }}>
-              <Button color="inherit" style={{ fontWeight: '600' }}>INPUT Demo</Button>
+            <NavLink to={routes.inputDemo} className={classes.NavLink}>
+              <Button className={classes.button}>INPUT Demo</Button>
             </NavLink>
-            <NavLink to="/Children-Demo" style={{ color: 'white', textDecoration: 'none' }}>
-              <Button color="inherit" style={{ fontWeight: '600' }}>CHILDREN DEMO</Button>
+            <NavLink to={routes.childrenDemo} className={classes.NavLink}>
+              <Button className={classes.button}>CHILDREN DEMO</Button>
             </NavLink>
           </div>
-          <NavLink to="logout" style={{ color: 'white', textDecoration: 'none', fontWeight: '400' }}>
-            <Button color="inherit" style={{ fontWeight: '600' }} onClick={localStorage.removeItem('token')}>LOGOUT</Button>
+          <NavLink to={routes.logout} className={classes.NavLink}>
+            <Button className={classes.button} onClick={() => localStorage.removeItem('token')}>LOGOUT</Button>
           </NavLink>
         </Toolbar>
       </AppBar>

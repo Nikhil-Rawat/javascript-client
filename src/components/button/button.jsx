@@ -16,13 +16,14 @@ const ButtonField = (props) => {
 
 ButtonField.propTypes = {
   value: string.isRequired,
-  onClick: func.isRequired,
+  onClick: func,
   disabled: bool,
   color: string.isRequired,
 };
 
 ButtonField.defaultProps = {
   disabled: false,
+  onClick: () => {},
 };
 
 export default ButtonField;

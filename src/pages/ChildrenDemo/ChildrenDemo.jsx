@@ -17,7 +17,7 @@ const ChildrenDemo = () => (
     <Math first={7} second={4} operator="+">
       {
         (first, second, result) => (
-          <Typography variant="p" color="primary">
+          <Typography variant="inherit" color="primary">
             {`When we add ${first} with ${second} then we will get ${result} as result`}
           </Typography>
         )

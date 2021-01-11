@@ -1,156 +1,130 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import {
-  TextField, SelectField, RadioGroup, ButtonField,
+  TextField, SelectField, ButtonField, RadioGroup,
 } from '../../components';
-import * as constants from '../../config/constants';
 
 const schema = yup.object().shape({
-  Name: yup.string().required('Name is required').min(3, 'Invalid name'),
-  sports: yup.string().required('Sport is a required field'),
-  cricket: yup.string().when('sports', { is: 'Cricket', then: yup.string().required('Select an option') }),
-  football: yup.string().when('sports', { is: 'Football', then: yup.string().required('Select an option') }),
+  name: yup.string().required('Name is Required').min(3, 'Minimum 3 characters'),
+  sports: yup.string().required('Sport is a Required Field'),
+  cricket: yup.string().when('sports', { is: 'CRICKET', then: yup.string().required('Choose an option') }),
+  football: yup.string().when('sports', { is: 'FOOTBALL', then: yup.string().required('Choose an option') }),
 });
-class InputDemo extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      Name: '',
-      sports: '',
-      football: '',
-      cricket: '',
-      blur: {
-        Name: false,
-        sports: false,
-        football: false,
-        cricket: false,
-      },
-    };
 
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleSportsChange = this.handleSportsChange.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
-    this.hasError = this.hasError.bind(this);
-    this.isTouched = this.isTouched.bind(this);
-  }
+const InputDemo = () => {
+  const [state, setState] = useState({
+    name: '', sports: '', cricket: '', football: '',
+  });
 
-  handleNameChange = (event) => {
-    this.setState({ Name: event.target.value }, () => {
-      console.log(this.state);
+  const [blur, setBlur] = useState({
+    name: false, sports: false, cricket: false, football: false,
+  });
+
+  const handleNameChange = (event) => {
+    setState({ ...state, name: event.target.value });
+  };
+
+  const handleSportChange = (event) => {
+    setState({
+      ...state, sports: event.target.value, cricket: '', football: '',
     });
-  }
+  };
 
-  handleSportsChange = (event) => {
-    this.setState({ sports: event.target.value, football: '', cricket: '' }, () => {
-      console.log(this.state);
-    });
-  }
+  const handleCricketChange = (event) => {
+    setState({ ...state, cricket: event.target.value });
+  };
 
-  handleFootballChange = (event) => {
-    this.setState({ football: event.target.value }, () => {
-      console.log(this.state);
-    });
-  }
+  const handleFootballChange = (event) => {
+    setState({ ...state, football: event.target.value });
+  };
 
-  handleCricketChange = (event) => {
-    this.setState({ cricket: event.target.value }, () => {
-      console.log(this.state);
-    });
-  }
-
-  hasError = () => {
+  const hasError = () => {
     try {
-      return !schema.validateSync(this.state);
+      return !schema.validateSync(state);
     } catch (err) {
       return true;
     }
-  }
+  };
 
-  handleBlur =(field) => {
-    const { blur } = this.state;
-    this.setState({ blur: { ...blur, [field]: true } }, () => {
-    });
-  }
+  const handleBlur = (field) => {
+    setBlur({ ...blur, [field]: true });
+  };
 
-  isTouched = () => {
-    const { blur } = this.state;
-    return (blur.Name || blur.sports || blur.cricket || blur.football);
-  }
+  const isTouched = () => (blur.name || blur.sports || blur.cricket || blur.football);
 
-  getError = (field) => {
-    const { blur } = this.state;
-    if (blur[field] && this.hasError) {
+  const getError = (field) => {
+    if (blur[field] && hasError) {
       try {
-        schema.validateSyncAt(field, this.state);
+        schema.validateSyncAt(field, state);
       } catch (err) {
         return err.message;
       }
     }
     return null;
-  }
+  };
 
-  render() {
-    const {
-      Name, sports, football, cricket,
-    } = this.state;
-    return (
-      <>
-        <p style={{ marginLeft: '10px' }}><b>Name</b></p>
-        <TextField
-          defaultvalue={Name}
-          error={this.getError('Name')}
-          onChange={this.handleNameChange}
-          onBlur={() => this.handleBlur('Name')}
-        />
-        <p style={{ marginLeft: '10px' }}><b>Select the game you play?</b></p>
-        <SelectField
-          value={sports}
-          error={this.getError('sports')}
-          options={constants.sports}
-          onChange={this.handleSportsChange}
-          onBlur={() => this.handleBlur('sports')}
-        />
-        {
-          sports === 'Football' ? (
-            <>
-              <p style={{ marginLeft: '10px' }}><b>What do you do?</b></p>
-              <RadioGroup
-                value={football}
-                options={constants.Football}
-                error={this.getError('football')}
-                onChange={this.handleFootballChange}
-                onBlur={() => this.handleBlur('football')}
-              />
-            </>
-          )
-            : <p />
-        }
-        {
-          sports === 'Cricket' ? (
-            <>
-              <p style={{ marginLeft: '10px' }}><b>What do you do?</b></p>
-              <RadioGroup
-                value={cricket}
-                options={constants.Cricket}
-                error={this.getError('cricket')}
-                onChange={this.handleCricketChange}
-                onBlur={() => this.handleBlur('cricket')}
-              />
-            </>
-          )
-            : <p />
-        }
-        <ButtonField value="Cancel" onClick={() => {}} />
+  useEffect(() => {
+    console.log(state);
+  });
+
+  return (
+    <>
+      <p style={{ marginLeft: '10px' }}><b>Name</b></p>
+      <TextField value="" label="NAME" onChange={handleNameChange} error={getError('name')} onBlur={() => handleBlur('name')} />
+      <p style={{ marginLeft: '10px' }}><b>Select Sports</b></p>
+      <SelectField
+        value={state.sports}
+        options={[
+          { label: 'CRICKET', value: 'cricket' },
+          { label: 'FOOTBALL', value: 'football' },
+        ]}
+        onChange={handleSportChange}
+        error={getError('sports')}
+        onBlur={() => handleBlur('sports')}
+      />
+      {state.sports === 'CRICKET' ? (
+        <>
+          <p style={{ marginLeft: '10px' }}><b>What you do.?</b></p>
+          <RadioGroup
+            value={state.cricket}
+            options={[
+              { label: 'BATSMAN', value: 'batsman' },
+              { label: 'BOWLER', value: 'bowler' },
+              { label: 'WICKET KEEPER', value: 'wicket keeper' },
+              { label: 'ALL ROUNDER', value: 'all rounder' },
+            ]}
+            onChange={handleCricketChange}
+            error={getError('cricket')}
+            onBlur={() => handleBlur('cricket')}
+          />
+        </>
+      ) : null }
+      {state.sports === 'FOOTBALL' ? (
+        <>
+          <p><b>What you do.?</b></p>
+          <RadioGroup
+            value={state.football}
+            options={[
+              { label: 'ATTACKER', value: 'attacker' },
+              { label: 'DEFENDER', value: 'defender' },
+            ]}
+            onChange={handleFootballChange}
+            error={getError('football')}
+            onBlur={() => handleBlur('football')}
+          />
+        </>
+      ) : null}
+      <div style={{ display: 'flex' }}>
+        <ButtonField value="Cancel" color={true.toString()} />
         <ButtonField
           value="Submit"
-          onClick={() => {}}
-          disabled={this.hasError() || !this.isTouched}
-          color={this.hasError() || !this.isTouched}
+          disabled={hasError() || !isTouched()}
+          color={(!(hasError() || !isTouched())).toString()}
         />
-      </>
-    );
-  }
-}
+      </div>
+    </>
+  );
+};
 
 export default InputDemo;

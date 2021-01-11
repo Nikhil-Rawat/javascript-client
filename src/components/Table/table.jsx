@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,39 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { TableSortLabel, TablePagination, IconButton } from '@material-ui/core';
-
-const useStyles = makeStyles({
-  table: {
-    boxSizing: 'border-box',
-    border: '1px solid silver',
-    boxShadow: '1px 2px 3px silver',
-    marginTop: '10px',
-  },
-  topLabel: {
-    color: 'gray',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  rowStyle1: {
-    background: 'lightblue',
-    '&:hover': {
-      backgroundColor: 'rgb(7, 177, 77, 0.42)',
-      cursor: 'pointer',
-    },
-  },
-  rowStyle2: {
-    background: 'white',
-    '&:hover': {
-      backgroundColor: 'rgb(7, 177, 77, 0.42)',
-      cursor: 'pointer',
-    },
-  },
-});
+import { useStyles } from './style';
 
 const ActionsCell = (ActionProps) => {
   const { actions, details } = ActionProps;
-  console.log(details);
   return (
     <>
       {
@@ -106,7 +75,7 @@ export default function BasicTable(props) {
                 ))
               }
               <TableCell align="center" key={`${data[id]}`}>
-                <ActionsCell actions={actions} details={data} />
+                <ActionsCell actions={actions} details={element} />
               </TableCell>
             </TableRow>
           ))}
