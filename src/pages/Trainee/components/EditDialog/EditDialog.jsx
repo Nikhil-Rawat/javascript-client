@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -6,17 +7,26 @@ import {
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import EmailIcon from '@material-ui/icons/Email';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
 
 export const useStyle = makeStyles(() => ({
   margin: {
     margin: '10px 0',
   },
+  buttonProgress: {
+    color: 'green',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 const EditDialog = (props) => {
   const {
-    open, onClose, onSubmit, defaultValues,
+    open, onClose, onSubmit, defaultValues, loading,
   } = props;
   const classes = useStyle();
   const schema = yup.object().shape({
@@ -74,7 +84,7 @@ const EditDialog = (props) => {
     setBlur({ Name: false, Email: false });
     onClose();
   };
-  const handleSubmit = (details) => {
+  const handleSubmit = async (details) => {
     setBlur({ Name: false, Email: false });
     onSubmit(details);
   };
@@ -129,7 +139,12 @@ const EditDialog = (props) => {
         <Button autoFocus onClick={handleClose} color="secondary">
           Cancel
         </Button>
-        <Button disabled={hasErrors() || !isTouched()} onClick={() => handleSubmit(state)} color="primary">
+        <Button disabled={hasErrors() || !isTouched() || loading} onClick={() => handleSubmit(state)} color="primary">
+          <div className={classes.buttonProgress}>
+            {
+              loading && <CircularProgress color="primary" size="20px" />
+            }
+          </div>
           Submit
         </Button>
       </DialogActions>
@@ -142,11 +157,13 @@ EditDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   defaultValues: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 EditDialog.defaultProps = {
   open: false,
   defaultValues: {},
+  loading: false,
 };
 
 export default EditDialog;

@@ -76,19 +76,43 @@ const TraineeList = (props) => {
     setEditOpen(false);
   };
 
-  const handleEditDialogSubmit = (openSnackbar, state) => {
-    openSnackbar('success', 'Trainee Updated Successfully');
-    setEditOpen(false);
-    console.log(state);
+  const handleEditDialogSubmit = async (openSnackbar, state) => {
+    setLoading(true);
+    const dataToUpdate = {
+      originalId: details.originalId,
+      name: state.Name,
+      email: state.Email,
+      updatedBy: 'admin',
+    };
+    const ServerResponse = await callApi('trainee/update', dataToUpdate);
+    if (ServerResponse.status === 200) {
+      openSnackbar('success', 'Trainee Updated Successfully');
+      setEditOpen(false);
+      setLoading(false);
+    } else {
+      openSnackbar('error', 'Trainee Update Failed');
+      setLoading(false);
+    }
   };
 
   const handleDeleteClose = () => {
     setDeleteOpen(false);
   };
 
-  const handleDelete = (openSnackbar) => {
+  const handleDelete = async (openSnackbar) => {
+    setLoading(true);
     if (details.createdAt >= '2019-02-14') {
-      openSnackbar('success', 'Trainee Deleted Successfully');
+      const ServerResponse = await callApi('trainee/delete', `trainee/delete/${details.originalId}`);
+      if (ServerResponse.data) {
+        openSnackbar('success', 'Trainee Deleted Successfully');
+        setLoading(false);
+      } else {
+        openSnackbar('error', 'Trainee cannot be Deleted');
+        setLoading(false);
+      }
+      if (page > 0 && records.TraineeArray.length === 1) {
+        setPage(page - 1);
+      }
     } else {
       openSnackbar('error', 'Trainee cannot be Deleted');
     }
@@ -99,7 +123,7 @@ const TraineeList = (props) => {
     const response = await callApi('trainee/getall', { }, { skip: page * 5, limit: 5 });
     let TraineeData = [];
     let totalcount = 0;
-    if (response.data) {
+    if (response.data.data[0].records) {
       TraineeData = response.data.data[0].records;
       totalcount = response.data.data[0].Total_Count;
       localStorage.setItem('detailsData', JSON.stringify(TraineeData));
@@ -107,14 +131,13 @@ const TraineeList = (props) => {
       setLoading(false);
     } else {
       setLoading(false);
-      return [];
+      setRecords({ TraineeArray: [] });
     }
-    return null;
   };
 
   React.useEffect(() => {
     handleTableData();
-  }, [open, page]);
+  }, [open, page, loading]);
 
   return (
     <SnackbarContext.Consumer>
@@ -129,7 +152,7 @@ const TraineeList = (props) => {
             data={records.TraineeArray}
             loader={loading}
             disabled={loading}
-            dataLength={records.TraineeArray.length}
+            dataLength={records.TotalCount}
             columns={[
               {
                 field: 'name',
@@ -173,12 +196,14 @@ const TraineeList = (props) => {
             onSubmit={(state) => handleSubmit(openSnackbar, state)}
           />
           <EditDialog
+            loading={loading}
             open={editOpen}
             onClose={handleEditDialogClose}
             onSubmit={(state) => handleEditDialogSubmit(openSnackbar, state)}
             defaultValues={details}
           />
           <DeleteDialog
+            loading={loading}
             open={deleteOpen}
             onClose={handleDeleteClose}
             onDelete={() => handleDelete(openSnackbar)}

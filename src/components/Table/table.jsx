@@ -69,7 +69,13 @@ export default function BasicTable(props) {
             >
               {
                 columns.map((ele) => (
-                  <TableCell onClick={() => onSelect(element[id])} key={`${element[id]}${ele.field}`} component="th" scope="row" align={ele.align}>
+                  <TableCell
+                    onClick={() => onSelect(element[id])}
+                    key={`${element[id]}${ele.field}`}
+                    component="th"
+                    scope="row"
+                    align={ele.align}
+                  >
                     { ele.format ? ele.format(element[ele.field]) : element[ele.field]}
                   </TableCell>
                 ))

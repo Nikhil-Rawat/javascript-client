@@ -13,6 +13,9 @@ export const callApi = async (request, state, params) => {
       localStorage.setItem('token', responseApi.data.data);
       return responseApi;
     } catch (error) {
+      if (error.message === 'Network Error') {
+        return error.message;
+      }
       return error.response.data.message;
     }
   }
@@ -40,6 +43,29 @@ export const callApi = async (request, state, params) => {
     } catch (err) {
       localStorage.removeItem('token');
       return err;
+    }
+  }
+  if (request === 'trainee/update') {
+    try {
+      const responseApi = await axios.put(`${baseUrl}${request}`, {
+        updatedBy: state.updatedBy,
+        originalId: state.originalId,
+        email: state.email,
+        name: state.name,
+      },
+      { headers: Header });
+      return responseApi;
+    } catch (error) {
+      return error;
+    }
+  }
+  if (request === 'trainee/delete') {
+    try {
+      const responseApi = await axios.delete(`${baseUrl}${state}`,
+        { headers: Header });
+      return responseApi;
+    } catch (error) {
+      return error;
     }
   }
   return null;
