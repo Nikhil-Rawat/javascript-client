@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,39 +7,32 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { TableSortLabel } from '@material-ui/core';
+import { TableSortLabel, TablePagination, IconButton } from '@material-ui/core';
+import { useStyles } from './style';
 
-const useStyles = makeStyles({
-  table: {
-    boxSizing: 'border-box',
-    border: '1px solid silver',
-    boxShadow: '1px 2px 3px silver',
-  },
-  topLabel: {
-    color: 'gray',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  rowStyle1: {
-    background: 'lightblue',
-    '&:hover': {
-      backgroundColor: 'rgb(7, 177, 77, 0.42)',
-      cursor: 'pointer',
-    },
-  },
-  rowStyle2: {
-    background: 'white',
-    '&:hover': {
-      backgroundColor: 'rgb(7, 177, 77, 0.42)',
-      cursor: 'pointer',
-    },
-  },
-});
+const ActionsCell = (ActionProps) => {
+  const { actions, details } = ActionProps;
+  return (
+    <>
+      {
+        actions.map((action, index) => (
+          <IconButton
+            key={`${index + 1}`}
+            disableFocusRipple
+            size="small"
+            onClick={() => action.handler(details)}
+          >
+            {action.icon}
+          </IconButton>
+        ))
+      }
+    </>
+  );
+};
 
 export default function BasicTable(props) {
   const {
-    id, data, columns, order, orderBy, onSort, onSelect,
+    id, data, columns, order, orderBy, onSort, onSelect, page, count, onChangePage, actions,
   } = props;
   const classes = useStyles();
 
@@ -78,15 +69,32 @@ export default function BasicTable(props) {
             >
               {
                 columns.map((ele) => (
-                  <TableCell onClick={() => onSelect(element[id])} key={`${element[id]}${ele.field}`} component="th" scope="row" align={ele.align}>
+                  <TableCell
+                    onClick={() => onSelect(element[id])}
+                    key={`${element[id]}${ele.field}`}
+                    component="th"
+                    scope="row"
+                    align={ele.align}
+                  >
                     { ele.format ? ele.format(element[ele.field]) : element[ele.field]}
                   </TableCell>
                 ))
               }
+              <TableCell align="center" key={`${data[id]}`}>
+                <ActionsCell actions={actions} details={element} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        count={count}
+        page={page}
+        rowsPerPageOptions={[]}
+        component="div"
+        onChangePage={onChangePage}
+        rowsPerPage={5}
+      />
     </TableContainer>
   );
 }
@@ -99,6 +107,10 @@ BasicTable.propTypes = {
   orderBy: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  actions: PropTypes.array.isRequired,
 };
 
 BasicTable.defaultProps = {

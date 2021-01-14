@@ -11,11 +11,27 @@ import { func, bool } from 'prop-types';
 import { InputAdornment } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
+import { makeStyles } from '@material-ui/core/styles';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
 
+const useStyles = makeStyles(() => ({
+  buttonProgress: {
+    color: 'green',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
+
 const FormDialog = (props) => {
-  const { onClose, open, onSubmit } = props;
+  const classes = useStyles();
+  const {
+    onClose, open, onSubmit, loading,
+  } = props;
 
   const [state, setstate] = useState({
     Name: '', Email: '', Password: '', Confirm: '',
@@ -23,6 +39,7 @@ const FormDialog = (props) => {
   const [blur, setblur] = useState({
     Name: false, Email: false, Password: false, Confirm: false,
   });
+
   const schema = yup.object().shape({
     Name: yup.string().required().min(3),
     Email: yup.string().email().required(),
@@ -58,6 +75,15 @@ const FormDialog = (props) => {
     setblur({ ...blur, [field]: true });
   };
 
+  const resetState = () => {
+    setstate({
+      Name: '', Email: '', Password: '', Confirm: '',
+    });
+    setblur({
+      Name: false, Email: false, Password: false, Confirm: false,
+    });
+  };
+
   const isTouched = () => (blur.Name || blur.Password || blur.Confirm || blur.Email);
 
   const getError = (field) => {
@@ -85,7 +111,7 @@ const FormDialog = (props) => {
             label="Name"
             type="name"
             variant="outlined"
-            error={getError('Name')}
+            error={!!getError('Name')}
             helperText={getError('Name')}
             onChange={handleNameChange}
             onBlur={() => handleBlur('Name')}
@@ -104,7 +130,7 @@ const FormDialog = (props) => {
             label="Email"
             type="email"
             variant="outlined"
-            error={getError('Email')}
+            error={!!getError('Email')}
             helperText={getError('Email')}
             onChange={handleEmailChange}
             onBlur={() => handleBlur('Email')}
@@ -124,7 +150,7 @@ const FormDialog = (props) => {
               label="Password"
               type="new-password"
               variant="outlined"
-              error={getError('Password')}
+              error={!!getError('Password')}
               helperText={getError('Password')}
               onChange={handlePasswordChange}
               onBlur={() => handleBlur('Password')}
@@ -142,7 +168,7 @@ const FormDialog = (props) => {
               label="Confirm"
               type="new-password"
               variant="outlined"
-              error={getError('Confirm')}
+              error={!!getError('Confirm')}
               helperText={getError('Confirm')}
               onChange={handleConfirmChange}
               onBlur={() => handleBlur('Confirm')}
@@ -160,7 +186,12 @@ const FormDialog = (props) => {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { onSubmit(state); }} color="primary" disabled={hasError() || !isTouched()}>
+          <Button onClick={() => { onSubmit(state); resetState(); }} color="primary" disabled={hasError() || !isTouched() || loading}>
+            <div className={classes.buttonProgress}>
+              {
+                loading && <CircularProgress color="primary" size="20px" />
+              }
+            </div>
             Submit
           </Button>
         </DialogActions>
@@ -172,12 +203,14 @@ const FormDialog = (props) => {
 FormDialog.defaultProps = {
   open: false,
   onSubmit: null,
+  loading: false,
 };
 
 FormDialog.propTypes = {
   open: bool,
   onClose: func.isRequired,
   onSubmit: func,
+  loading: bool,
 };
 
 export default FormDialog;

@@ -26,3 +26,11 @@ export const Cricket = [
 ];
 
 export const select = 'Select';
+export const success = 'success';
+
+export const routes = {
+  textfieldDDemo: '/TextField-Demo',
+  inputDemo: '/Input-Demo',
+  childrenDemo: '/Children-Demo',
+  logout: 'logout',
+};

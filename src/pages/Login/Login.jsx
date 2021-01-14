@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import { Typography, InputAdornment, Container } from '@material-ui/core';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
@@ -8,6 +10,9 @@ import MailIcon from '@material-ui/icons/Mail';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import * as yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { callApi } from '../../libs/utils';
+import { SnackbarContext } from '../../contexts';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,13 +51,20 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     boxSizing: 'border-box',
   },
+  buttonProgress: {
+    color: 'green',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
-const FormDialog = () => {
+const FormDialog = ({ history }) => {
   const classes = useStyles();
-  const [open, setopen] = useState({
-    openDialog: true,
-  });
+
+  const [spin, setSpin] = useState(false);
 
   const [state, setstate] = useState({
     Email: '', Password: '',
@@ -89,9 +101,16 @@ const FormDialog = () => {
 
   const isTouched = () => (blur.Password || blur.Email);
 
-  const handleClose = () => {
-    setopen({ ...open, openDialog: false });
-    console.log(state);
+  const handleLogin = async (openSnackbar) => {
+    setSpin(true);
+    const ServerResponse = await callApi('user/login', state);
+    if (localStorage.getItem('token')) {
+      openSnackbar('success', 'Login Successfull');
+      history.push('/trainee');
+    } else {
+      openSnackbar('error', ServerResponse);
+      setSpin(false);
+    }
   };
 
   const getError = (field) => {
@@ -106,54 +125,77 @@ const FormDialog = () => {
   };
 
   return (
-    <Container className={classes.container} fullWidth aria-labelledby="form-dialog-title">
-      <LockRoundedIcon className={classes.icon} />
-      <Typography id="form-dialog-title" className={classes.login}>Login</Typography>
-      <TextField
-        className={classes.input}
-        size="medium"
-        id="Email"
-        label="Email"
-        type="email"
-        variant="outlined"
-        error={getError('Email')}
-        helperText={getError('Email')}
-        onChange={handleEmailChange}
-        onBlur={() => handleBlur('Email')}
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <MailIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        className={classes.input}
-        size="medium"
-        id="Password"
-        label="Password"
-        type="password"
-        variant="outlined"
-        error={getError('Password')}
-        helperText={getError('Password')}
-        onChange={handlePasswordChange}
-        onBlur={() => handleBlur('Password')}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <VisibilityOffIcon />
-            </InputAdornment>
-          ),
-        }}
-        fullWidth
-      />
-      <Button fullWidth onClick={handleClose} className={classes.signin} color="primary" variant="contained" disabled={hasError() || !isTouched()}>
-        SIGN IN
-      </Button>
-    </Container>
+    <SnackbarContext.Consumer>
+      {({ openSnackbar }) => (
+        <Container className={classes.container} aria-labelledby="form-dialog-title">
+          <LockRoundedIcon className={classes.icon} />
+          <Typography id="form-dialog-title" className={classes.login}>Login</Typography>
+          <form>
+            <TextField
+              className={classes.input}
+              size="medium"
+              id="Email"
+              label="Email"
+              type="email"
+              variant="outlined"
+              error={!!getError('Email')}
+              helperText={getError('Email')}
+              onChange={handleEmailChange}
+              onBlur={() => handleBlur('Email')}
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MailIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              className={classes.input}
+              size="medium"
+              id="Password"
+              label="Password"
+              type="password"
+              variant="outlined"
+              error={!!getError('Password')}
+              helperText={getError('Password')}
+              onChange={handlePasswordChange}
+              onBlur={() => handleBlur('Password')}
+              autoComplete="true"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <VisibilityOffIcon />
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+          </form>
+          <Button
+            fullWidth
+            onClick={() => handleLogin(openSnackbar)}
+            className={classes.signin}
+            color="primary"
+            variant="contained"
+            disabled={hasError() || !isTouched() || spin}
+          >
+            <div className={classes.buttonProgress}>
+              {
+                spin && <CircularProgress color="primary" size="20px" />
+              }
+            </div>
+            LOGIN
+          </Button>
+        </Container>
+      )}
+    </SnackbarContext.Consumer>
   );
+};
+
+FormDialog.propTypes = {
+  history: PropTypes.object.isRequired,
 };
 
 export default FormDialog;

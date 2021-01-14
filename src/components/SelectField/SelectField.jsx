@@ -1,6 +1,6 @@
 import React from 'react';
 import { func, string } from 'prop-types';
-import { select } from '../../config';
+import { select } from '../../config/constants';
 import stylesheet from './style';
 
 const SelectField = (prop) => {
@@ -20,7 +20,7 @@ const SelectField = (prop) => {
           {options[1].value}
         </option>
       </select>
-      <p>{error}</p>
+      <p style={stylesheet.error}>{error}</p>
     </>
   );
 };

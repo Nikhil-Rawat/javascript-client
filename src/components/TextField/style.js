@@ -8,6 +8,11 @@ const stylesheet = {
   errorinput: {
     border: '1px solid red',
   },
+  error: {
+    marginLeft: '10px',
+    color: 'red',
+    fontFamily: 'bold',
+  },
 };
 
 export default stylesheet;

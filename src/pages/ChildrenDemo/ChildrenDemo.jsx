@@ -3,49 +3,27 @@ import React from 'react';
 import { Math } from '../../components';
 
 const ChildrenDemo = () => (
-  <>
-    <Math first={4} second={5} operator="+">
+  <div style={{ margin: '20px', fontSize: '15px' }}>
+    <Math first={7} second={4} operator="+" />
+    <Math first={7} second={4} operator="+">
       {
-        (item) => (
+        (first, second, result) => (
           <p>
-            Sum of
-            {' '}
-            {item.first}
-            {' '}
-            and
-            {' '}
-            {item.second}
-            {' '}
-            is
-            {' '}
-            {item.result}
+            {`Sum of ${first} and ${second} is ${result}`}
           </p>
         )
       }
     </Math>
-    <Math first={4} second={5} operator="+">
+    <Math first={7} second={4} operator="+">
       {
-        (item) => (
-          <Typography>
-            When we add
-            {' '}
-            {item.first}
-            {' '}
-            with
-            {' '}
-            {item.second}
-            {' '}
-            then we will get
-            {' '}
-            {item.result}
-            {' '}
-            as result
+        (first, second, result) => (
+          <Typography variant="inherit" color="primary">
+            {`When we add ${first} with ${second} then we will get ${result} as result`}
           </Typography>
         )
       }
     </Math>
-    <Math first={6} second={9} operator="*" />
-  </>
+  </div>
 );
 
 export default ChildrenDemo;

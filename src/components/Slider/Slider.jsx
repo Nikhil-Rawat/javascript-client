@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getNextRoundRobin, getRandomNumber } from '../libs/utils';
+import { getNextRoundRobin, getRandomNumber } from '../../libs/utils';
 import stylesheet from './style';
 
 const Slider = (props) => {

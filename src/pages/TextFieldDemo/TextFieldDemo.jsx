@@ -8,7 +8,7 @@ import {
   FULL_STACK_IMAGE,
   JS_IMAGE,
   LOAD_BALANCER_IMAGE,
-} from '../../config/index';
+} from '../../config/constants';
 
 const TextFieldDemo = () => (
   <>
@@ -20,24 +20,36 @@ const TextFieldDemo = () => (
         PUBLIC_IMAGE_FOLDER + JS_IMAGE,
         PUBLIC_IMAGE_FOLDER + LOAD_BALANCER_IMAGE,
       ]}
-      height={300}
+      height={250}
       random
     />
-    <p>This is Disabled Input</p>
+    <p style={{ marginLeft: '10px' }}>
+      <b>
+        This is Disabled Input
+      </b>
+    </p>
     <TextField
       defaultValue="Default Value"
       disabled
     />
-    <p>This is valid input</p>
+    <p style={{ marginLeft: '10px' }}>
+      <b>
+        This is Valid Input
+      </b>
+    </p>
     <TextField
       defaultValue="Default Value"
     />
-    <p>An input with error</p>
+    <p style={{ marginLeft: '10px' }}>
+      <b>
+        An Input with Error
+      </b>
+    </p>
     <TextField
       defaultValue="101"
       error
     />
-    <p style={{ color: 'red', fontSize: '12px' }}>Could not be greater than</p>
+    <p style={{ color: 'red', marginLeft: '10px' }}>Could not be greater than 100</p>
   </>
 );
 
