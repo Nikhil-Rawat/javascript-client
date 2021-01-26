@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/react-hoc';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -11,8 +12,8 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import * as yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { callApi } from '../../libs/utils';
 import { SnackbarContext } from '../../contexts';
+import { LOGIN_USER } from './mutation';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -74,6 +75,8 @@ const FormDialog = ({ history }) => {
     Email: false, Password: false,
   });
 
+  const [loginUser] = useMutation(LOGIN_USER);
+
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
     Password: yup.string().required().min(8).matches(/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/, 'Password must be alphanumeric'),
@@ -102,13 +105,23 @@ const FormDialog = ({ history }) => {
   const isTouched = () => (blur.Password || blur.Email);
 
   const handleLogin = async (openSnackbar) => {
-    setSpin(true);
-    const ServerResponse = await callApi('user/login', state);
-    if (localStorage.getItem('token')) {
-      openSnackbar('success', 'Login Successfull');
-      history.push('/trainee');
-    } else {
-      openSnackbar('error', ServerResponse);
+    let ServerResponse = {};
+    try {
+      setSpin(true);
+      ServerResponse = await loginUser({
+        variables:
+      { email: state.Email, password: state.Password },
+      });
+      if (ServerResponse.data.loginUser.status === 200) {
+        localStorage.setItem('token', ServerResponse.data.loginUser.data);
+        openSnackbar('success', ServerResponse.data.loginUser.message);
+        history.push('/trainee');
+      } else {
+        openSnackbar('error', ServerResponse.data.loginUser.message);
+        setSpin(false);
+      }
+    } catch (err) {
+      openSnackbar('error', 'Apollo Under Maintaince');
       setSpin(false);
     }
   };
