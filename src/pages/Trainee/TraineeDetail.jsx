@@ -14,7 +14,7 @@ const traineeDetails = (props) => {
 
   const data = JSON.parse(localStorage.getItem('detailsData'));
 
-  const idString = '_id';
+  const idString = 'originalId';
   const details = data.find(((element) => element[idString] === id));
   if (!details) {
     return <NotFound />;

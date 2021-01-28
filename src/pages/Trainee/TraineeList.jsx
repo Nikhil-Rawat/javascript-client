@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, CssBaseline } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useQuery } from '@apollo/react-hoc';
 import moment from 'moment';
 // import trainees from './data/trainee';
 import { FormDialog, EditDialog, DeleteDialog } from './components';
@@ -11,6 +12,7 @@ import { BasicTable } from '../../components';
 import { SnackbarContext } from '../../contexts';
 import { callApi } from '../../libs/utils';
 import { WithLoaderAndMessage } from '../../components/HOC';
+import { GETALL_TRAINEE } from './query';
 
 const TraineeList = (props) => {
   const { match, history } = props;
@@ -23,6 +25,7 @@ const TraineeList = (props) => {
   const [details, setDetails] = useState({});
   const [records, setRecords] = useState({ TraineeArray: [], TotalCount: 0 });
   const [loading, setLoading] = useState(true);
+  const { refetch } = useQuery(GETALL_TRAINEE);
 
   const EnhanchedTable = WithLoaderAndMessage(BasicTable);
 
@@ -119,19 +122,43 @@ const TraineeList = (props) => {
     setDeleteOpen(false);
   };
 
+  // const handleTableData = async () => {
+  //   try {
+  //     const response = await callApi('trainee/getall', { }, { skip: page * 5, limit: 5 });
+  //     let TraineeData = [];
+  //     let totalcount = 0;
+  //     if (response.data.data.records) {
+  //       TraineeData = response.data.data.records;
+  //       totalcount = response.data.data.Total_Count;
+  //       localStorage.setItem('detailsData', JSON.stringify(TraineeData));
+  //       setRecords({ TraineeArray: TraineeData, TotalCount: totalcount });
+  //       setLoading(false);
+  //     } else {
+  //       setLoading(false);
+  //       setRecords({ TraineeArray: [] });
+  //     }
+  //   } catch (error) {
+  //     setLoading(true);
+  //   }
+  // };
+
   const handleTableData = async () => {
-    const response = await callApi('trainee/getall', { }, { skip: page * 5, limit: 5 });
-    let TraineeData = [];
-    let totalcount = 0;
-    if (response.data.data[0].records) {
-      TraineeData = response.data.data[0].records;
-      totalcount = response.data.data[0].Total_Count;
-      localStorage.setItem('detailsData', JSON.stringify(TraineeData));
-      setRecords({ TraineeArray: TraineeData, TotalCount: totalcount });
-      setLoading(false);
-    } else {
-      setLoading(false);
-      setRecords({ TraineeArray: [] });
+    try {
+      const response = await refetch({ skip: page * 5, limit: 5 });
+      let TraineeData = [];
+      let totalcount = 0;
+      if (response.data.getAllTrainee.status === '200') {
+        TraineeData = response.data.getAllTrainee.data.records;
+        totalcount = response.data.getAllTrainee.data.Total_Count;
+        localStorage.setItem('detailsData', JSON.stringify(TraineeData));
+        setRecords({ TraineeArray: TraineeData, TotalCount: totalcount });
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setRecords({ TraineeArray: [] });
+      }
+    } catch (error) {
+      setLoading(true);
     }
   };
 
@@ -148,7 +175,7 @@ const TraineeList = (props) => {
             Add Trainee
           </Button>
           <EnhanchedTable
-            id="_id"
+            id="originalId"
             data={records.TraineeArray}
             loader={loading}
             disabled={loading}
