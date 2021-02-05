@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { Button, CssBaseline } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useQuery } from '@apollo/react-hoc';
+import { useQuery, useMutation } from '@apollo/react-hoc';
 import moment from 'moment';
-// import trainees from './data/trainee';
 import { FormDialog, EditDialog, DeleteDialog } from './components';
 import { BasicTable } from '../../components';
 import { SnackbarContext } from '../../contexts';
-import { callApi } from '../../libs/utils';
 import { WithLoaderAndMessage } from '../../components/HOC';
 import { GETALL_TRAINEE } from './query';
+import { CREATE_TRAINEE, UPDATE_TRAINEE, DELETE_TRAINEE } from './mutation';
+import { SUCCESS, APOLLO_UNDER_MAINTANCE, ERROR } from '../../config/constants';
 
 const TraineeList = (props) => {
   const { match, history } = props;
@@ -26,6 +26,9 @@ const TraineeList = (props) => {
   const [records, setRecords] = useState({ TraineeArray: [], TotalCount: 0 });
   const [loading, setLoading] = useState(true);
   const { refetch } = useQuery(GETALL_TRAINEE);
+  const [createTrainee] = useMutation(CREATE_TRAINEE);
+  const [updateTrainee] = useMutation(UPDATE_TRAINEE);
+  const [deleteTrainee] = useMutation(DELETE_TRAINEE);
 
   const EnhanchedTable = WithLoaderAndMessage(BasicTable);
 
@@ -51,15 +54,25 @@ const TraineeList = (props) => {
   };
 
   const handleSubmit = async (openSnackbar, state) => {
-    setLoading(true);
-    await callApi('trainee/create', state);
-    if (localStorage.getItem('status') === '200') {
-      openSnackbar('success', 'Trainee Created Successfully');
-      setOpen(false);
+    try {
+      setLoading(true);
+      const response = await createTrainee({
+        variables:
+        {
+          name: state.Name, email: state.Email, password: state.Password, role: 'trainee',
+        },
+      });
+      if (response.data.createTrainee.status === 200) {
+        openSnackbar(SUCCESS, response.data.createTrainee.message);
+        setOpen(false);
+        setLoading(false);
+      } else {
+        openSnackbar(ERROR, response.data.createTrainee.message);
+        setLoading(false);
+      }
+    } catch (error) {
       setLoading(false);
-    } else {
-      openSnackbar('error', 'Trainee Not Created');
-      setLoading(false);
+      openSnackbar(ERROR, APOLLO_UNDER_MAINTANCE);
     }
   };
 
@@ -80,21 +93,22 @@ const TraineeList = (props) => {
   };
 
   const handleEditDialogSubmit = async (openSnackbar, state) => {
-    setLoading(true);
-    const dataToUpdate = {
-      originalId: details.originalId,
-      name: state.Name,
-      email: state.Email,
-      updatedBy: 'admin',
-    };
-    const ServerResponse = await callApi('trainee/update', dataToUpdate);
-    if (ServerResponse.status === 200) {
-      openSnackbar('success', 'Trainee Updated Successfully');
-      setEditOpen(false);
-      setLoading(false);
-    } else {
-      openSnackbar('error', 'Trainee Update Failed');
-      setLoading(false);
+    try {
+      setLoading(true);
+      const ServerResponse = await updateTrainee({
+        variables:
+        { name: state.Name, email: state.Email, originalId: details.originalId },
+      });
+      if (ServerResponse.data.updateTrainee.status === 200) {
+        openSnackbar(SUCCESS, ServerResponse.data.updateTrainee.message);
+        setEditOpen(false);
+        setLoading(false);
+      } else {
+        openSnackbar(ERROR, ServerResponse.data.updateTrainee.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      openSnackbar(ERROR, APOLLO_UNDER_MAINTANCE);
     }
   };
 
@@ -103,51 +117,38 @@ const TraineeList = (props) => {
   };
 
   const handleDelete = async (openSnackbar) => {
-    setLoading(true);
-    if (details.createdAt >= '2019-02-14') {
-      const ServerResponse = await callApi('trainee/delete', `trainee/delete/${details.originalId}`);
-      if (ServerResponse.data) {
-        openSnackbar('success', 'Trainee Deleted Successfully');
-        setLoading(false);
+    try {
+      setLoading(true);
+      if (details.createdAt >= '2019-02-14') {
+        const ServerResponse = await deleteTrainee({ variables: { id: details.originalId } });
+        if (ServerResponse.data.deleteTrainee.status === 200) {
+          openSnackbar(SUCCESS, ServerResponse.data.deleteTrainee.message);
+          setLoading(false);
+        } else {
+          openSnackbar(ERROR, ServerResponse.data.deleteTrainee.message);
+          setLoading(false);
+        }
+        if (page > 0 && records.TraineeArray.length === 1) {
+          setPage(page - 1);
+        }
       } else {
-        openSnackbar('error', 'Trainee cannot be Deleted');
+        openSnackbar(ERROR, 'Trainee cannot be Deleted');
         setLoading(false);
       }
-      if (page > 0 && records.TraineeArray.length === 1) {
-        setPage(page - 1);
-      }
-    } else {
-      openSnackbar('error', 'Trainee cannot be Deleted');
+      setDeleteOpen(false);
+    } catch (error) {
+      openSnackbar(ERROR, APOLLO_UNDER_MAINTANCE);
+      setLoading(false);
+      setDeleteOpen(false);
     }
-    setDeleteOpen(false);
   };
-
-  // const handleTableData = async () => {
-  //   try {
-  //     const response = await callApi('trainee/getall', { }, { skip: page * 5, limit: 5 });
-  //     let TraineeData = [];
-  //     let totalcount = 0;
-  //     if (response.data.data.records) {
-  //       TraineeData = response.data.data.records;
-  //       totalcount = response.data.data.Total_Count;
-  //       localStorage.setItem('detailsData', JSON.stringify(TraineeData));
-  //       setRecords({ TraineeArray: TraineeData, TotalCount: totalcount });
-  //       setLoading(false);
-  //     } else {
-  //       setLoading(false);
-  //       setRecords({ TraineeArray: [] });
-  //     }
-  //   } catch (error) {
-  //     setLoading(true);
-  //   }
-  // };
 
   const handleTableData = async () => {
     try {
       const response = await refetch({ skip: page * 5, limit: 5 });
       let TraineeData = [];
       let totalcount = 0;
-      if (response.data.getAllTrainee.status === '200') {
+      if (response.data.getAllTrainee.status === 200) {
         TraineeData = response.data.getAllTrainee.data.records;
         totalcount = response.data.getAllTrainee.data.Total_Count;
         localStorage.setItem('detailsData', JSON.stringify(TraineeData));
@@ -158,7 +159,7 @@ const TraineeList = (props) => {
         setRecords({ TraineeArray: [] });
       }
     } catch (error) {
-      setLoading(true);
+      setLoading(false);
     }
   };
 

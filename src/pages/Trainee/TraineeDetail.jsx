@@ -5,7 +5,6 @@ import {
 import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-// import trainees from './data/trainee';
 import { NotFound } from '../NoMatch';
 import profile from './data/images/profile.jpg';
 

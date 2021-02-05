@@ -26,12 +26,4 @@ const client = new ApolloClient({
   request: setHeaders,
 });
 
-// const initialState = {
-//   token: '',
-// };
-
-// cache.writeData({ data: initialState });
-
-// client.onResetStore(() => cache.writeData({ data: initialState }));
-
 export default client;
