@@ -26,7 +26,9 @@ export const Cricket = [
 ];
 
 export const select = 'Select';
-export const success = 'success';
+export const SUCCESS = 'success';
+export const ERROR = 'error';
+export const APOLLO_UNDER_MAINTANCE = 'Apollo under maintance';
 
 export const routes = {
   textfieldDDemo: '/TextField-Demo',

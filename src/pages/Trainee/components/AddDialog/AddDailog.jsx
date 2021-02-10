@@ -8,7 +8,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { func, bool } from 'prop-types';
-import { InputAdornment } from '@material-ui/core';
+import { InputAdornment, IconButton } from '@material-ui/core';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,6 +39,10 @@ const FormDialog = (props) => {
   });
   const [blur, setblur] = useState({
     Name: false, Email: false, Password: false, Confirm: false,
+  });
+
+  const [visibility, setVisibility] = useState({
+    type: 'password', icon: <VisibilityOffIcon />,
   });
 
   const schema = yup.object().shape({
@@ -82,6 +87,14 @@ const FormDialog = (props) => {
     setblur({
       Name: false, Email: false, Password: false, Confirm: false,
     });
+  };
+
+  const handleVisibility = () => {
+    if (visibility.type === 'password' || visibility.icon === <VisibilityOffIcon />) {
+      setVisibility({ ...visibility, type: 'text', icon: <VisibilityIcon /> });
+    } else {
+      setVisibility({ ...visibility, type: 'password', icon: <VisibilityOffIcon /> });
+    }
   };
 
   const isTouched = () => (blur.Name || blur.Password || blur.Confirm || blur.Email);
@@ -148,7 +161,7 @@ const FormDialog = (props) => {
               margin="dense"
               id="password"
               label="Password"
-              type="new-password"
+              type={visibility.type}
               variant="outlined"
               error={!!getError('Password')}
               helperText={getError('Password')}
@@ -157,7 +170,9 @@ const FormDialog = (props) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <VisibilityOffIcon />
+                    <IconButton onClick={() => handleVisibility()} size="small" color="inherit">
+                      {visibility.icon}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}
@@ -166,7 +181,7 @@ const FormDialog = (props) => {
               margin="dense"
               id="confirm"
               label="Confirm"
-              type="new-password"
+              type={visibility.type}
               variant="outlined"
               error={!!getError('Confirm')}
               helperText={getError('Confirm')}
@@ -175,7 +190,9 @@ const FormDialog = (props) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <VisibilityOffIcon />
+                    <IconButton onClick={() => handleVisibility()} size="small" color="inherit">
+                      {visibility.icon}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}
