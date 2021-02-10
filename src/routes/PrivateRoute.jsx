@@ -1,5 +1,7 @@
+/* eslint-disable no-alert */
 import React from 'react';
 import * as jwt from 'jsonwebtoken';
+import Alert from '@material-ui/lab/Alert';
 import {
   Switch, Route, Redirect,
 } from 'react-router-dom';
@@ -33,9 +35,12 @@ const PrivateRoute = () => {
     );
   }
   return (
-    <Switch>
-      <Redirect path="/" to="/login" />
-    </Switch>
+    <>
+      <Alert severity="info">This is an info alert — check it out!</Alert>
+      <Switch>
+        <Redirect path="/" to="/login" />
+      </Switch>
+    </>
   );
 };
 
