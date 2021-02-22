@@ -1,5 +1,6 @@
-import { InMemoryCache, ApolloClient, split } from '@apollo/client';
-import { HttpLink } from 'apollo-link-http';
+import {
+  InMemoryCache, ApolloClient, split, HttpLink,
+} from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -25,10 +26,6 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const cache = new InMemoryCache();
-
-const setHeaders = (operation) => operation.setContext({ headers: { authorization: localStorage.getItem('token') } });
-
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -43,8 +40,7 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
-  cache,
-  request: setHeaders,
+  cache: new InMemoryCache(),
 });
 
 export default client;

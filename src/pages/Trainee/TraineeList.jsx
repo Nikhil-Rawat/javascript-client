@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, CssBaseline } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useQuery, useMutation } from '@apollo/react-hoc';
+import { useQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
 import { FormDialog, EditDialog, DeleteDialog } from './components';
 import { BasicTable } from '../../components';
@@ -14,6 +14,7 @@ import { GETALL_TRAINEE } from './query';
 import { CREATE_TRAINEE, UPDATE_TRAINEE, DELETE_TRAINEE } from './mutation';
 import { SUCCESS, APOLLO_UNDER_MAINTANCE, ERROR } from '../../config/constants';
 import { TRAINEE_ADDED, TRAINEE_UPDATED, TRAINEE_DELETED } from './subscription';
+import client from '../../libs/apollo-client';
 
 const TraineeList = (props) => {
   const { match, history } = props;
@@ -47,7 +48,7 @@ const TraineeList = (props) => {
     }
   }
 
-  const [createTrainee] = useMutation(CREATE_TRAINEE);
+  const [createTrainee] = useMutation(CREATE_TRAINEE, { client });
   const [updateTrainee] = useMutation(UPDATE_TRAINEE);
   const [deleteTrainee] = useMutation(DELETE_TRAINEE);
 
