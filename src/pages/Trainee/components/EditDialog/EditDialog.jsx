@@ -30,7 +30,7 @@ const EditDialog = (props) => {
   } = props;
   const classes = useStyle();
   const schema = yup.object().shape({
-    Name: yup.string().required('Name is required').min(3, 'should have more then 3 characters'),
+    Name: yup.string().required('Name is required').min(3, 'Name should have atleast 3 characters'),
     Email: yup.string().required('Email is required').email(),
   });
 

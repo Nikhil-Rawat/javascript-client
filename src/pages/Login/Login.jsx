@@ -1,18 +1,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import { Typography, InputAdornment, Container } from '@material-ui/core';
+import {
+  Typography, InputAdornment, Container, IconButton,
+} from '@material-ui/core';
 import LockRoundedIcon from '@material-ui/icons/LockRounded';
 import MailIcon from '@material-ui/icons/Mail';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import * as yup from 'yup';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { callApi } from '../../libs/utils';
 import { SnackbarContext } from '../../contexts';
+import { LOGIN_USER } from './mutation';
+import { APOLLO_UNDER_MAINTANCE, SUCCESS, ERROR } from '../../config/constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -66,6 +71,10 @@ const FormDialog = ({ history }) => {
 
   const [spin, setSpin] = useState(false);
 
+  const [visibility, setVisibility] = useState({
+    type: 'password', icon: <VisibilityOffIcon />,
+  });
+
   const [state, setstate] = useState({
     Email: '', Password: '',
   });
@@ -73,6 +82,8 @@ const FormDialog = ({ history }) => {
   const [blur, setblur] = useState({
     Email: false, Password: false,
   });
+
+  const [loginUser] = useMutation(LOGIN_USER);
 
   const schema = yup.object().shape({
     Email: yup.string().email().required(),
@@ -102,13 +113,23 @@ const FormDialog = ({ history }) => {
   const isTouched = () => (blur.Password || blur.Email);
 
   const handleLogin = async (openSnackbar) => {
-    setSpin(true);
-    const ServerResponse = await callApi('user/login', state);
-    if (localStorage.getItem('token')) {
-      openSnackbar('success', 'Login Successfull');
-      history.push('/trainee');
-    } else {
-      openSnackbar('error', ServerResponse);
+    let ServerResponse = {};
+    try {
+      setSpin(true);
+      ServerResponse = await loginUser({
+        variables:
+      { email: state.Email, password: state.Password },
+      });
+      if (ServerResponse.data.loginUser.status === 200) {
+        localStorage.setItem('token', ServerResponse.data.loginUser.data);
+        openSnackbar(SUCCESS, ServerResponse.data.loginUser.message);
+        history.push('/trainee');
+      } else {
+        openSnackbar(ERROR, ServerResponse.data.loginUser.message);
+        setSpin(false);
+      }
+    } catch (err) {
+      openSnackbar(ERROR, APOLLO_UNDER_MAINTANCE);
       setSpin(false);
     }
   };
@@ -122,6 +143,14 @@ const FormDialog = ({ history }) => {
       }
     }
     return null;
+  };
+
+  const handleVisibility = () => {
+    if (visibility.type === 'password' || visibility.icon === <VisibilityOffIcon />) {
+      setVisibility({ ...visibility, type: 'text', icon: <VisibilityIcon /> });
+    } else {
+      setVisibility({ ...visibility, type: 'password', icon: <VisibilityOffIcon /> });
+    }
   };
 
   return (
@@ -146,7 +175,9 @@ const FormDialog = ({ history }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MailIcon />
+                    <IconButton size="small" color="inherit">
+                      <MailIcon />
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}
@@ -156,7 +187,7 @@ const FormDialog = ({ history }) => {
               size="medium"
               id="Password"
               label="Password"
-              type="password"
+              type={visibility.type}
               variant="outlined"
               error={!!getError('Password')}
               helperText={getError('Password')}
@@ -166,7 +197,9 @@ const FormDialog = ({ history }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <VisibilityOffIcon />
+                    <IconButton onClick={() => handleVisibility()} size="small" color="inherit">
+                      {visibility.icon}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}

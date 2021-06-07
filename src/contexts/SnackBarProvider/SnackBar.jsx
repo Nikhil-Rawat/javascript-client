@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { success } from '../../config/constants';
+import { SUCCESS } from '../../config/constants';
 
 const SnackBar = (props) => {
   const {
@@ -27,7 +27,7 @@ SnackBar.propTypes = {
 
 SnackBar.defaultProps = {
   message: '',
-  status: success,
+  status: SUCCESS,
   open: false,
   duration: 6000,
 };

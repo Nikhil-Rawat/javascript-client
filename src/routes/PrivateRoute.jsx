@@ -1,4 +1,7 @@
+/* eslint-disable no-alert */
 import React from 'react';
+import * as jwt from 'jsonwebtoken';
+import Alert from '@material-ui/lab/Alert';
 import {
   Switch, Route, Redirect,
 } from 'react-router-dom';
@@ -9,6 +12,12 @@ import {
 import NotFound from '../pages/NoMatch/NoMatch';
 
 const PrivateRoute = () => {
+  try {
+    const token = localStorage.getItem('token');
+    jwt.verify(token, 'qwertyuiopasdfghjklzxcvbnm123456');
+  } catch (error) {
+    localStorage.removeItem('token');
+  }
   if (localStorage.getItem('token')) {
     return (
       <>
@@ -26,9 +35,12 @@ const PrivateRoute = () => {
     );
   }
   return (
-    <Switch>
-      <Redirect path="/" to="/login" />
-    </Switch>
+    <>
+      <Alert severity="info">This is an info alert — check it out!</Alert>
+      <Switch>
+        <Redirect path="/" to="/login" />
+      </Switch>
+    </>
   );
 };
 
